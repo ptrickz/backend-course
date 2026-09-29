@@ -22,7 +22,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   movies Movie[] @relation("MovieCreator")
-  watchListItems WatchListItem[]
+  watchlistItems WatchlistItem[]
 }
 
 model Movie {
@@ -38,14 +38,14 @@ model Movie {
 
   // Define relations
   creator User? @relation("MovieCreator", fields: [createdBy], references: [id], onDelete: Cascade)
-  watchListItems WatchListItem[]
+  watchlistItems WatchlistItem[]
 }
 
-model WatchListItem {
+model WatchlistItem {
   id        String   @id @default(uuid())
   userId    String
   movieId   String
-  staatus   WatchlistStatus @default(PLANNED)
+  status    WatchlistStatus @default(PLANNED)
   rating    Int?
   notes     String?
   createdAt DateTime @default(now())
@@ -54,6 +54,8 @@ model WatchListItem {
   // Define relations
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   movie     Movie    @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId]) // Ensure a user can't have the same movie in their watchlist multiple times
 
 }
 

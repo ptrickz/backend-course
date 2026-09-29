@@ -4,6 +4,8 @@ import { connectDB, disconnectDB } from "./config/db.js";
 
 // Import routes
 import movieRoutes from "./routes/movieRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import watchListRoutes from "./routes/watchListRoutes.js";
 
 config();
 connectDB();
@@ -13,12 +15,18 @@ const app = express();
 // Middleware
 app.use(express.json());
 
+// Bpdy parsing middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 //API ROUTES
 app.use("/movies", movieRoutes);
+app.use("/auth", authRoutes);
+app.use("/watchlist", watchListRoutes);
 
 const PORT = 5001;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is updated and running on port ${PORT}`);
 });
 
